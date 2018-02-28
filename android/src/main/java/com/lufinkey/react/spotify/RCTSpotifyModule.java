@@ -385,8 +385,8 @@ public class RCTSpotifyModule extends ReactContextBaseJavaModule implements Play
 	}
 
 	@ReactMethod
-	//login((loggedIn, error?))
-	public void login(final Callback callback)
+	//login(options, (loggedIn, error?))
+	public void login(ReadableMap options, final Callback callback)
 	{
 		AuthActivity.performAuthFlow(reactContext.getCurrentActivity(), auth, new AuthActivityListener() {
 			@Override
@@ -432,13 +432,13 @@ public class RCTSpotifyModule extends ReactContextBaseJavaModule implements Play
 			@Override
 			public void onAuthActivityReceivedCode(final AuthActivity activity, String code)
 			{
-				final ProgressDialog dialog = new ProgressDialog(activity, android.R.style.Theme_Dialog);
-				dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-				dialog.getWindow().setGravity(Gravity.CENTER);
-				dialog.setMessage(loginLoadingText);
-				dialog.setCancelable(false);
-				dialog.setIndeterminate(true);
-				dialog.show();
+				// final ProgressDialog dialog = new ProgressDialog(activity, android.R.style.Theme_Dialog);
+				// dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+				// dialog.getWindow().setGravity(Gravity.CENTER);
+				// dialog.setMessage(loginLoadingText);
+				// dialog.setCancelable(false);
+				// dialog.setIndeterminate(true);
+				// dialog.show();
 
 				// perform token swap
 				auth.swapCodeForToken(code, new CompletionBlock<String>() {
@@ -448,7 +448,7 @@ public class RCTSpotifyModule extends ReactContextBaseJavaModule implements Play
 						// dismiss activity if error
 						if(error != null)
 						{
-							dialog.dismiss();
+							// dialog.dismiss();
 							// dismiss activity
 							activity.finish(new CompletionBlock<Void>() {
 								@Override
@@ -468,7 +468,7 @@ public class RCTSpotifyModule extends ReactContextBaseJavaModule implements Play
 							@Override
 							public void invoke(final Boolean loggedIn, final SpotifyError error)
 							{
-								dialog.dismiss();
+								// dialog.dismiss();
 								// dismiss activity
 								activity.finish(new CompletionBlock<Void>() {
 									@Override
@@ -489,13 +489,13 @@ public class RCTSpotifyModule extends ReactContextBaseJavaModule implements Play
 			@Override
 			public void onAuthActivityReceivedToken(final AuthActivity activity, String accessToken, int expiresIn)
 			{
-				final ProgressDialog dialog = new ProgressDialog(activity, android.R.style.Theme_Black);
-				dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-				dialog.getWindow().setGravity(Gravity.CENTER);
-				dialog.setMessage(loginLoadingText);
-				dialog.setCancelable(false);
-				dialog.setIndeterminate(true);
-				dialog.show();
+				// final ProgressDialog dialog = new ProgressDialog(activity, android.R.style.Theme_Black);
+				// dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+				// dialog.getWindow().setGravity(Gravity.CENTER);
+				// dialog.setMessage(loginLoadingText);
+				// dialog.setCancelable(false);
+				// dialog.setIndeterminate(true);
+				// dialog.show();
 
 				// apply access token
 				auth.applyAuthAccessToken(accessToken, expiresIn);
@@ -505,7 +505,7 @@ public class RCTSpotifyModule extends ReactContextBaseJavaModule implements Play
 					@Override
 					public void invoke(final Boolean loggedIn, final SpotifyError error)
 					{
-						dialog.dismiss();
+						// dialog.dismiss();
 						// dismiss activity
 						activity.finish(new CompletionBlock<Void>() {
 							@Override
