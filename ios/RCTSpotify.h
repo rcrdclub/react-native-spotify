@@ -5,6 +5,8 @@
 #import <React/RCTBridgeModule.h>
 #endif
 
+#import <SpotifyAuthentication/SpotifyAuthentication.h>
+
 extern NSString* const RCTSpotifyErrorDomain;
 extern NSString* const RCTSpotifyWebAPIDomain;
 
@@ -32,6 +34,8 @@ typedef enum
 
 +(NSError*)errorWithCode:(RCTSpotifyErrorCode)code description:(NSString*)description;
 
+@property (strong) SPTAuth* auth;
+
 //test()
 -(id)test;
 
@@ -44,6 +48,8 @@ typedef enum
 
 //login(options, (loggedIn, error?))
 -(void)login:(NSDictionary*)options completion:(RCTResponseSenderBlock)completion;
+//finishLogin(url)
+-(void)finishLogin:(NSString*)url;
 //logout((error?))
 -(void)logout:(RCTResponseSenderBlock)completion;
 //isLoggedIn()

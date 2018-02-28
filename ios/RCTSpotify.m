@@ -19,9 +19,11 @@ NSString* const RCTSpotifyWebAPIDomain = @"com.spotify.web-api";
 @interface RCTSpotify() <SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate>
 {
 	BOOL initialized;
-	SPTAuth* _auth;
+//  SPTAuth* _auth;
 	SPTAudioStreamingController* _player;
 	
+  RCTResponseSenderBlock _completion;
+  
 	NSDictionary* _options;
 	NSNumber* _cacheSize;
 	
@@ -33,6 +35,7 @@ NSString* const RCTSpotifyWebAPIDomain = @"com.spotify.web-api";
 +(NSError*)errorWithCode:(RCTSpotifyErrorCode)code description:(NSString*)description;
 +(NSError*)errorWithCode:(RCTSpotifyErrorCode)code description:(NSString*)description fields:(NSDictionary*)fields;
 +(NSMutableDictionary*)mutableDictFromDict:(NSDictionary*)dict;
++(BOOL)canHandleAuthURL;
 -(BOOL)hasPlayerScope;
 
 -(void)logBackInIfNeeded:(void(^)(BOOL loggedIn, NSError* error))completion;
@@ -100,6 +103,11 @@ NSString* const RCTSpotifyWebAPIDomain = @"com.spotify.web-api";
 		return [NSMutableDictionary dictionary];
 	}
 	return dict.mutableCopy;
+}
+
++(BOOL)canHandleAuthURL:(NSURL*)url
+{
+  return [[SPTAuth defaultInstance] canHandleURL:url];
 }
 
 -(BOOL)hasPlayerScope
@@ -340,11 +348,23 @@ RCT_EXPORT_METHOD(isInitializedAsync:(RCTResponseSenderBlock)completion)
 	});
 }
 
-RCT_EXPORT_METHOD(login:(RCTResponseSenderBlock)completion)
+RCT_EXPORT_METHOD(login:(NSDictionary*)options completion:(RCTResponseSenderBlock)completion)
 {
 	//do UI logic on main thread
 	dispatch_async(dispatch_get_main_queue(), ^{
-		RCTSpotifyAuthController* authController = [[RCTSpotifyAuthController alloc] initWithAuth:_auth];
+    _completion = nil;
+    NSURL *appUrl = _auth.spotifyAppAuthenticationURL;
+    if (appUrl) {
+      UIApplication *application = [UIApplication sharedApplication];
+      if ([application canOpenURL:appUrl]) {
+        [application openURL:appUrl options:@{} completionHandler:^(BOOL success) {
+          _completion = completion;
+        }];
+        return;
+      }
+    }
+
+		RCTSpotifyAuthController* authController = [[RCTSpotifyAuthController alloc] initWithAuth:_auth options:options];
 		
 		__weak RCTSpotifyAuthController* weakAuthController = authController;
 		authController.completion = ^(BOOL authenticated, NSError* error) {
@@ -457,7 +477,30 @@ RCT_EXPORT_METHOD(handleAuthURLAsync:(NSString*)url completion:(RCTResponseSende
 	return completion(@[ [self handleAuthURL:url] ]);
 }
 
-
+RCT_EXPORT_METHOD(finishLogin:(NSString*)url)
+{
+  [_auth handleAuthCallbackWithTriggeredAuthURL:[NSURL URLWithString:url] callback:^(NSError* error, SPTSession* session){
+    if(session!=nil)
+    {
+      _auth.session = session;
+    }
+    
+    if(error != nil)
+    {
+      if(_completion != nil)
+      {
+        _completion(@[@NO, [RCTSpotifyConvert NSError:error]]);
+      }
+    }
+    else
+    {
+      if(_completion != nil)
+      {
+        _completion(@[@YES, [NSNull null]]);
+      }
+    }
+  }];
+}
 
 
 
