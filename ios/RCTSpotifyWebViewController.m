@@ -14,7 +14,7 @@
 {
 	if(self = [super init])
 	{
-		_webView = [[UIWebView alloc] init];
+		_webView = [[WKWebView alloc] init];
 	}
 	return self;
 }

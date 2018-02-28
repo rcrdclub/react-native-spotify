@@ -6,10 +6,10 @@
 //  Copyright © 2018 Facebook. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 
 @interface RCTSpotifyWebViewController : UIViewController
 
-@property (readonly) UIWebView* webView;
+@property (readonly) WKWebView* webView;
 
 @end

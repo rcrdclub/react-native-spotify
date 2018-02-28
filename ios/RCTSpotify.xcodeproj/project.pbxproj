@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D38385220450FFA00E3E6D7 /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D38385120450FFA00E3E6D7 /* UIColor+Hex.m */; };
 		A00A83BE1FB5188A00394AF0 /* RCTSpotifyConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = A00A83BC1FB5188A00394AF0 /* RCTSpotifyConvert.m */; };
 		A01F099F1FAED1DB002AA48C /* RCTSpotifyAuthController.m in Sources */ = {isa = PBXBuildFile; fileRef = A01F099E1FAED1DB002AA48C /* RCTSpotifyAuthController.m */; };
 		A0A4341D1FAE256D0073DAB9 /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A4341B1FAE25690073DAB9 /* SpotifyAudioPlayback.framework */; };
@@ -31,6 +32,8 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRCTSpotify.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTSpotify.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D38385120450FFA00E3E6D7 /* UIColor+Hex.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Hex.m"; path = "../../../ios/hifi-swipe/UIColor+Hex.m"; sourceTree = "<group>"; };
+		2D38385320450FFF00E3E6D7 /* UIColor+Hex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIColor+Hex.h"; path = "../../../ios/UIColor+Hex.h"; sourceTree = "<group>"; };
 		A00A83BC1FB5188A00394AF0 /* RCTSpotifyConvert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTSpotifyConvert.m; sourceTree = "<group>"; };
 		A00A83BD1FB5188A00394AF0 /* RCTSpotifyConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTSpotifyConvert.h; sourceTree = "<group>"; };
 		A01F099D1FAED1DB002AA48C /* RCTSpotifyAuthController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTSpotifyAuthController.h; sourceTree = "<group>"; };
@@ -72,6 +75,8 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				2D38385320450FFF00E3E6D7 /* UIColor+Hex.h */,
+				2D38385120450FFA00E3E6D7 /* UIColor+Hex.m */,
 				A0CB1CFF1FB4D718009989EA /* HelperMacros.h */,
 				B3E7B5881CC2AC0600A0062D /* RCTSpotify.h */,
 				B3E7B5891CC2AC0600A0062D /* RCTSpotify.m */,
@@ -155,6 +160,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A01F099F1FAED1DB002AA48C /* RCTSpotifyAuthController.m in Sources */,
+				2D38385220450FFA00E3E6D7 /* UIColor+Hex.m in Sources */,
 				A00A83BE1FB5188A00394AF0 /* RCTSpotifyConvert.m in Sources */,
 				A0AD6943200E5B00003EC7D8 /* RCTSpotifyProgressView.m in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RCTSpotify.m in Sources */,

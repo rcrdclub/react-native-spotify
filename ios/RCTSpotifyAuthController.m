@@ -9,12 +9,13 @@
 #import "RCTSpotifyAuthController.h"
 #import "RCTSpotifyWebViewController.h"
 #import "RCTSpotifyProgressView.h"
+#import "UIColor+Hex.h"
 
-@interface RCTSpotifyAuthController() <UIWebViewDelegate>
+@interface RCTSpotifyAuthController() <WKNavigationDelegate>
 {
 	SPTAuth* _auth;
 	RCTSpotifyWebViewController* _webController;
-	RCTSpotifyProgressView* _progressView;
+//  RCTSpotifyProgressView* _progressView;
 }
 -(void)didSelectCancelButton;
 @end
@@ -33,27 +34,45 @@
 
 -(id)initWithAuth:(SPTAuth*)auth
 {
-	RCTSpotifyWebViewController* rootController = [[RCTSpotifyWebViewController alloc] init];
-	if(self = [super initWithRootViewController:rootController])
-	{
-		_auth = auth;
-		_webController = rootController;
-		_progressView = [[RCTSpotifyProgressView alloc] init];
-		
-		self.navigationBar.barTintColor = [UIColor blackColor];
-		self.navigationBar.tintColor = [UIColor whiteColor];
-		self.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-		self.view.backgroundColor = [UIColor whiteColor];
-		self.modalPresentationStyle = UIModalPresentationFormSheet;
-		
-		_webController.webView.delegate = self;
-		//_webController.title = @"Log into Spotify";
-		_webController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(didSelectCancelButton)];
-		
-		NSURLRequest* request = [NSURLRequest requestWithURL:_auth.spotifyWebAuthenticationURL];
-		[_webController.webView loadRequest:request];
-	}
-	return self;
+	return [self initWithAuth:auth options:nil];
+}
+
+-(id)initWithAuth:(SPTAuth*)auth options:(NSDictionary*)options
+{
+  RCTSpotifyWebViewController* rootController = [[RCTSpotifyWebViewController alloc] init];
+  if(self = [super initWithRootViewController:rootController])
+  {
+    _auth = auth;
+    _webController = rootController;
+//    _progressView = [[RCTSpotifyProgressView alloc] init];
+    
+    if(options==nil)
+    {
+      options = @{};
+    }
+
+    if (options[@"webViewBarTintColor"]) {
+      self.navigationBar.barTintColor = [UIColor colorWithHexString:options[@"webViewBarTintColor"]];
+    } else {
+      self.navigationBar.barTintColor = [UIColor blackColor];
+    }
+
+    self.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.modalPresentationStyle = UIModalPresentationFormSheet;
+    
+    _webController.webView.navigationDelegate = self;
+    //_webController.title = @"Log into Spotify";
+    _webController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(didSelectCancelButton)];
+    
+    [_webController.webView setBackgroundColor:[UIColor whiteColor]];
+    [_webController.webView setOpaque:NO];
+
+    NSURLRequest* request = [NSURLRequest requestWithURL:_auth.spotifyWebAuthenticationURL];
+    [_webController.webView loadRequest:request];
+  }
+  return self;
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle
@@ -87,14 +106,15 @@
 }
 
 
-#pragma mark - UIWebViewDelegate
+#pragma mark - WKNavigationDelegate
 
--(BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType
+- (void) webView: (WKWebView *) webView decidePolicyForNavigationAction: (WKNavigationAction *) navigationAction decisionHandler: (void (^)(WKNavigationActionPolicy)) decisionHandler
 {
-	if([_auth canHandleURL:request.URL])
+	if([_auth canHandleURL:navigationAction.request.URL])
 	{
-		[_progressView showInView:self.view animated:YES completion:nil];
-		[_auth handleAuthCallbackWithTriggeredAuthURL:request.URL callback:^(NSError* error, SPTSession* session){
+//    [_progressView showInView:self.view animated:YES completion:nil];
+    NSLog(@"%@", navigationAction.request.URL);
+		[_auth handleAuthCallbackWithTriggeredAuthURL:navigationAction.request.URL callback:^(NSError* error, SPTSession* session){
 			if(session!=nil)
 			{
 				_auth.session = session;
@@ -115,9 +135,9 @@
 				}
 			}
 		}];
-		return NO;
+    return decisionHandler(NO);
 	}
-	return YES;
+	return decisionHandler(YES);
 }
 
 @end

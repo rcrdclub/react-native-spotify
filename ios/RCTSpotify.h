@@ -42,8 +42,8 @@ typedef enum
 //isInitializedAsync((initialized))
 -(void)isInitializedAsync:(RCTResponseSenderBlock)completion;
 
-//login((loggedIn, error?))
--(void)login:(RCTResponseSenderBlock)completion;
+//login(options, (loggedIn, error?))
+-(void)login:(NSDictionary*)options completion:(RCTResponseSenderBlock)completion;
 //logout((error?))
 -(void)logout:(RCTResponseSenderBlock)completion;
 //isLoggedIn()
