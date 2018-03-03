@@ -709,6 +709,25 @@ RCT_EXPORT_METHOD(skipToPrevious:(RCTResponseSenderBlock)completion)
 	}];
 }
 
+RCT_EXPORT_METHOD(seekToPosition:(double)position completion:(RCTResponseSenderBlock)completion)
+{
+  [self prepareForPlayer:^(NSError *error) {
+    if(error)
+    {
+      if(completion)
+      {
+        completion(@[ [RCTSpotifyConvert NSError:error] ]);
+      }
+      return;
+    }
+    [_player seekTo:(NSTimeInterval)position callback:^(NSError *error){
+      if(completion)
+      {
+        completion(@[ [RCTSpotifyConvert NSError:error] ]);
+      }
+    }];
+  }];
+}
 
 
 #pragma mark - React Native functions - Request Sending

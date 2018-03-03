@@ -89,6 +89,8 @@ typedef enum
 -(void)setShuffling:(BOOL)shuffling completion:(RCTResponseSenderBlock)completion;
 //setRepeating(repeating, (error?))
 -(void)setRepeating:(BOOL)repeating completion:(RCTResponseSenderBlock)completion;
+//seekToPosition(position, (error?))
+-(void)seekToPosition:(double)position completion:(RCTResponseSenderBlock)completion;
 
 //sendRequest(endpoint, method, params, isJSONBody, (result?, error?))
 -(void)sendRequest:(NSString*)endpoint method:(NSString*)method params:(NSDictionary*)params isJSONBody:(BOOL)jsonBody completion:(RCTResponseSenderBlock)completion;
