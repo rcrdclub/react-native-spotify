@@ -1,17 +1,19 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.lufinkey.react.spotify">
+          package="com.lufinkey.react.spotify"
+          xmlns:tools="http://schemas.android.com/tools">
 
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
   <application>
     <activity
       android:name="com.lufinkey.react.spotify.AuthActivity"
-      android:theme="@style/Theme.AppCompat.Dialog">
+        android:theme="@style/AuthTheme">
     </activity>
     <activity
       android:name="com.spotify.sdk.android.authentication.LoginActivity"
-      android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        tools:replace="android:theme"
+      android:theme="@style/AuthTheme">
     </activity>
   </application>
 

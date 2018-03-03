@@ -1,6 +1,6 @@
 package com.lufinkey.react.spotify;
 
-import android.app.ProgressDialog;
+//import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.net.ConnectivityManager;
