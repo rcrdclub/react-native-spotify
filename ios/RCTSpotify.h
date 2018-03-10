@@ -1,9 +1,11 @@
 
-#if __has_include("RCTBridgeModule.h")
-#import "RCTBridgeModule.h"
-#else
+//#if __has_include("RCTBridgeModule.h")
+//#import "RCTBridgeModule.h"
+//#else
+//#import <React/RCTBridgeModule.h>
+//#endif
+
 #import <React/RCTBridgeModule.h>
-#endif
 
 #import <SpotifyAuthentication/SpotifyAuthentication.h>
 
@@ -33,6 +35,8 @@ typedef enum
 @interface RCTSpotify : NSObject <RCTBridgeModule>
 
 +(NSError*)errorWithCode:(RCTSpotifyErrorCode)code description:(NSString*)description;
+
+@property (class, weak, nonatomic) UIViewController* topViewController;
 
 @property (strong) SPTAuth* auth;
 

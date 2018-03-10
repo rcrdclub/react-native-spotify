@@ -35,7 +35,7 @@ NSString* const RCTSpotifyWebAPIDomain = @"com.spotify.web-api";
 +(NSError*)errorWithCode:(RCTSpotifyErrorCode)code description:(NSString*)description;
 +(NSError*)errorWithCode:(RCTSpotifyErrorCode)code description:(NSString*)description fields:(NSDictionary*)fields;
 +(NSMutableDictionary*)mutableDictFromDict:(NSDictionary*)dict;
-+(BOOL)canHandleAuthURL;
++(BOOL)canHandleAuthURL:(NSURL*)url;
 -(BOOL)hasPlayerScope;
 
 -(void)logBackInIfNeeded:(void(^)(BOOL loggedIn, NSError* error))completion;
@@ -48,6 +48,18 @@ NSString* const RCTSpotifyWebAPIDomain = @"com.spotify.web-api";
 @end
 
 @implementation RCTSpotify
+
+static UIViewController* _topViewController = nil;
+
++(UIViewController *)topViewController {
+  return _topViewController;
+}
+
++(void)setTopViewController:(UIViewController *)topViewController {
+  if (_topViewController != topViewController) {
+    _topViewController = topViewController;
+  }
+}
 
 +(id)reactSafeArg:(id)arg
 {
@@ -393,7 +405,10 @@ RCT_EXPORT_METHOD(login:(NSDictionary*)options completion:(RCTResponseSenderBloc
 			}];
 		};
 		
-		UIViewController* topViewController = [RCTSpotifyAuthController topViewController];
+    UIViewController* topViewController = [RCTSpotify topViewController];
+    if (!topViewController) {
+      topViewController = [RCTSpotifyAuthController topViewController];
+    }
 		[topViewController presentViewController:authController animated:YES completion:nil];
 	});
 }
